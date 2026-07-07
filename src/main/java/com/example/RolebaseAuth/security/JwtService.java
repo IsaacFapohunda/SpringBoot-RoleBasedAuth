@@ -1,5 +1,5 @@
 package com.example.RolebaseAuth.security;
-import org.springframework.beans.factory.annotation.Value;
+
 import com.example.RolebaseAuth.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -8,8 +8,8 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -22,9 +22,8 @@ import java.util.function.Function;
 public class JwtService {
 
 
-    @Value("${jwt.secret}")
+    @Value("${JWT_SECRET}")
     private String secretKey;
-
     public String extractUserName(String jwtToken){
         return extractClaim(jwtToken, Claims::getSubject);
     }

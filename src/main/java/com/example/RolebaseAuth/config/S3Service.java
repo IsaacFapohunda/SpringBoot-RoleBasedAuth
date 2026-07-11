@@ -3,6 +3,7 @@ package com.example.RolebaseAuth.config;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -39,15 +40,20 @@ public class S3Service {
 
     private S3Presigner s3Presigner;
 
-    Region region = Region.EU_NORTH_1;
+    @Value("${aws.region}")
+    private Region region;
 
-   // private final String localfile = "Yabatech result.jpg";
-    private final String bucketName = "isaacfeppyawsbucket";
+    @Value("${aws.token}")
+    private String awsToken;
+
+    @Value("${aws.s3.bucket.name}")
+    private String bucketName;
+    //private final String bucketName = "isaacfeppyawsbucket";
 
     public String uploadS3(MultipartFile file){
-        S3Client s3Client = S3Client.builder().build();
+        S3Client s3Client = S3Client.builder().region(region).build();
         System.out.println("s3 client initialized");
-        S3Presigner s3Presigner = S3Presigner.builder().build();
+        S3Presigner s3Presigner = S3Presigner.builder().region(region).build();
         System.out.println("s3 presigner successful");
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -68,7 +74,8 @@ public class S3Service {
                     //    .getObjectRequest(builder -> builder.bucket("isaacfeppyawsbucket").key(localfile))
 
                     .signatureDuration(Duration.ofHours(24))
-                    .getObjectRequest(builder -> builder.bucket("isaacfeppyawsbucket").key(fileName))
+                 //   .getObjectRequest(builder -> builder.bucket("isaacfeppyawsbucket").key(fileName))
+                    .getObjectRequest(builder -> builder.bucket(bucketName).key(fileName))
                     .build();
             System.out.println("presign request ready");
 
@@ -77,7 +84,7 @@ public class S3Service {
 
             final String url = "https://api-ssl.bitly.com/v4/shorten";
             HttpHeaders header = new HttpHeaders();
-            header.set("Authorization", "Bearer 8cd9e691c603fa475a3c78835abc180334336384");
+            header.set("Authorization", "Bearer " + awsToken);
             com.example.RolebaseAuth.config.RequestBody requestBody = new com.example.RolebaseAuth.config.RequestBody(preSignedUrl.toString());
             System.out.println("done here");
 

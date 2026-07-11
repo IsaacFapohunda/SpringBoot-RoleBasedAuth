@@ -37,8 +37,8 @@ public class ProfilePictureService {
         BaseServerResponse serverResponse = new BaseServerResponse<>();
       try{
           String pictureLink = s3Service.uploadS3(file);
-          System.out.println(pictureLink + "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^66");
-
+          System.out.println(pictureLink + "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^77");
+          System.out.println("000");
           String fileName = StringUtils.cleanPath(file.getOriginalFilename());
           System.out.println("00");
 //        byte[] imageBytes = file.getBytes();

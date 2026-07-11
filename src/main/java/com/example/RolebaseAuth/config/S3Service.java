@@ -14,6 +14,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Text;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -40,6 +42,11 @@ public class S3Service {
 
     private S3Presigner s3Presigner;
 
+    @Value("${aws.access.key.id}") String accessKey;
+
+    @Value("${aws.secret.key.id}") String secretKey;
+
+
     @Value("${aws.region}")
     private Region region;
 
@@ -51,7 +58,9 @@ public class S3Service {
     //private final String bucketName = "isaacfeppyawsbucket";
 
     public String uploadS3(MultipartFile file){
-        S3Client s3Client = S3Client.builder().region(region).build();
+        S3Client s3Client = S3Client.builder().region(region).credentialsProvider(StaticCredentialsProvider.create(
+                AwsBasicCredentials.create(accessKey, secretKey)
+        )) .build();
         System.out.println("s3 client initialized");
         S3Presigner s3Presigner = S3Presigner.builder().region(region).build();
         System.out.println("s3 presigner successful");

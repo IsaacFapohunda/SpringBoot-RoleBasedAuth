@@ -38,7 +38,9 @@ public class ProfilePictureService {
       try{
           String pictureLink = s3Service.uploadS3(file);
           System.out.println(pictureLink + "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^66");
+
           String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+          System.out.println("00");
 //        byte[] imageBytes = file.getBytes();
           System.out.println("0");
           ProfilePictureModel profilePicture = new ProfilePictureModel(fileName, file.getContentType(), pictureLink);

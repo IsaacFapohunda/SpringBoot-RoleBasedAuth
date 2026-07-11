@@ -40,9 +40,16 @@ public class User {
     private String firstName;
 
 
-
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private Set<UserRole> roles = new HashSet<>();
+
+//    @OneToMany(fetch = FetchType.EAGER)
+//    private Set<UserRole> roles = new HashSet<>();
 
     private Boolean enabled = false;
     private Boolean locked = false;

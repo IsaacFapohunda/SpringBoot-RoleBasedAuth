@@ -40,22 +40,35 @@ public class ProfilePictureService {
           System.out.println(pictureLink + "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^66");
           String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 //        byte[] imageBytes = file.getBytes();
+          System.out.println("0");
           ProfilePictureModel profilePicture = new ProfilePictureModel(fileName, file.getContentType(), pictureLink);
+          System.out.println("1");
           profilePictureRepo.save(profilePicture);
-          System.out.println(profilePicture);
+          System.out.println("3");
+          System.out.println("profilePicture"  +  profilePicture);
+          System.out.println("4");
           Optional<User> user = userRepository.findById(userId);
+          System.out.println("5");
+          System.out.println("finding userrepo");
 
           user.get().setProfilePicture(profilePicture);
+          System.out.println("6");
+          System.out.println("saved user");
           userRepository.save(user.get());
+          System.out.println("7");
           System.out.println(user);
           serverResponse.setResponseCode("200");
           serverResponse.setResponseData(pictureLink);
           serverResponse.setSuccess(true);
+          System.out.println("successful");
           return serverResponse;
       } catch (Exception e){
-          serverResponse.setResponseCode("200");
-          serverResponse.setResponseMessage("Unable to upload file" + e);
-          serverResponse.setSuccess(true);
+
+          e.printStackTrace();
+          serverResponse.setResponseCode("500");
+          serverResponse.setResponseMessage(e.getMessage());
+          serverResponse.setSuccess(false);
+
           return serverResponse;
       }
     }

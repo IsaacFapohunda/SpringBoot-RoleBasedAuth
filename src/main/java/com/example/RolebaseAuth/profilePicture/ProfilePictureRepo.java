@@ -8,5 +8,4 @@ import java.util.Optional;
 public interface ProfilePictureRepo extends JpaRepository<ProfilePictureModel, String> {
     Optional<ProfilePictureModel> findById(String id);
 
-
 }

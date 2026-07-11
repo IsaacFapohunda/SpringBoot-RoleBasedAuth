@@ -15,7 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 public class ProfilePictureModel {
 
     @Id
-    @GeneratedValue(generator = "uuid")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @Column(unique = true, nullable = true)
 

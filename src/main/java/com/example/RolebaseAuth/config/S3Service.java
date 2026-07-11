@@ -50,19 +50,24 @@ public class S3Service {
     @Value("${aws.region}")
     private Region region;
 
-    @Value("${aws.token}")
-    private String awsToken;
+    @Value("${bitly.token}")
+    private String bitlyToken;
+
+    AwsBasicCredentials credentials =
+            AwsBasicCredentials.create(accessKey, secretKey);
+
+    StaticCredentialsProvider provider =
+            StaticCredentialsProvider.create(credentials);
 
     @Value("${aws.s3.bucket.name}")
     private String bucketName;
     //private final String bucketName = "isaacfeppyawsbucket";
 
     public String uploadS3(MultipartFile file){
-        S3Client s3Client = S3Client.builder().region(region).credentialsProvider(StaticCredentialsProvider.create(
-                AwsBasicCredentials.create(accessKey, secretKey)
-        )) .build();
+        this.s3Client = S3Client.builder().region(region).
+        credentialsProvider(provider).build();
         System.out.println("s3 client initialized");
-        S3Presigner s3Presigner = S3Presigner.builder().region(region).build();
+        this.s3Presigner = S3Presigner.builder().region(region).credentialsProvider(provider).build();
         System.out.println("s3 presigner successful");
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -93,7 +98,7 @@ public class S3Service {
 
             final String url = "https://api-ssl.bitly.com/v4/shorten";
             HttpHeaders header = new HttpHeaders();
-            header.set("Authorization", "Bearer " + awsToken);
+            header.set("Authorization", "Bearer " + bitlyToken);
             com.example.RolebaseAuth.config.RequestBody requestBody = new com.example.RolebaseAuth.config.RequestBody(preSignedUrl.toString());
             System.out.println("done here");
 

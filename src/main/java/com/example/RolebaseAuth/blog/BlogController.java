@@ -24,7 +24,8 @@ public class BlogController {
     private BlogRequest blogRequest;
 
     @PostMapping("/uploadBlog")
-    public ResponseEntity<Object> uploadBlog(@RequestBody BlogRequest blogRequest, HttpServletResponse response, HttpServletRequest request){
+    public ResponseEntity<Object> uploadBlog(@RequestBody BlogRequest blogRequest,
+                                             HttpServletResponse response, HttpServletRequest request){
         System.out.println("inside uploadBlog controller");
         return ResponseEntity.ok().body(blogService.CreateBlog(request,  response, blogRequest));
     }

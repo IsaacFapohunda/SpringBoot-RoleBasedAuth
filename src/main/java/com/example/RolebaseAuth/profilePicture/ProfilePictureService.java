@@ -31,7 +31,6 @@ public class ProfilePictureService {
     private final ProfilePictureRepo profilePictureRepo;
     private final S3Service s3Service;
 
-
     public BaseServerResponse s3SaveLinkToDb(String userId, MultipartFile file){
         System.out.println("inside uploadDp service");
         BaseServerResponse serverResponse = new BaseServerResponse<>();
@@ -65,7 +64,6 @@ public class ProfilePictureService {
           System.out.println("successful");
           return serverResponse;
       } catch (Exception e){
-
           e.printStackTrace();
           serverResponse.setResponseCode("500");
           serverResponse.setResponseMessage(e.getMessage());
@@ -83,7 +81,7 @@ public class ProfilePictureService {
         BaseServerResponse serverResponse = new BaseServerResponse<>();
         System.out.println("server");
        Optional<ProfilePictureModel> fileModel =  profilePictureRepo.findById(id);
-        System.out.println("icic");
+        System.out.println("ccc");
         System.out.println(fileModel);
         if (fileModel.isPresent()) {
             ProfilePictureModel file = fileModel.get();

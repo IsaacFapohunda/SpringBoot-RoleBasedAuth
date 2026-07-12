@@ -80,7 +80,7 @@ public class BlogService {
           System.out.println("dto initialized");
           userDTO.setFirstName(user.get().getFirstName());
           System.out.println("user dto ");
-          userDTO.setProfilePicture(user.get().getProfilePicture().getPictureS33link());
+          //userDTO.setProfilePicture(user.get().getProfilePicture().getPictureS33link());
           System.out.println("userdto");
           BlogResponse blogResponse = new BlogResponse();
           blogResponse.setBlogpostId(blogModel.getBlogpostId());

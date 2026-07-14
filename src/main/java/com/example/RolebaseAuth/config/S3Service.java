@@ -3,6 +3,7 @@ package com.example.RolebaseAuth.config;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -34,8 +35,7 @@ import java.util.UUID;
 
 @Data
 @Service
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class S3Service {
     //private BitlyShortLink bitlyShortLink;
     private S3Client s3Client;
@@ -48,26 +48,27 @@ public class S3Service {
 
 
     @Value("${aws.region}")
-    private Region region;
+    private String region;
 
     @Value("${bitly.token}")
     private String bitlyToken;
 
-    AwsBasicCredentials credentials =
-            AwsBasicCredentials.create(accessKey, secretKey);
+    private StaticCredentialsProvider provider(){
+        AwsBasicCredentials credentials =
+                AwsBasicCredentials.create(accessKey, secretKey);
+        return StaticCredentialsProvider.create(credentials);
+    }
 
-    StaticCredentialsProvider provider =
-            StaticCredentialsProvider.create(credentials);
 
     @Value("${aws.s3.bucket.name}")
     private String bucketName;
     //private final String bucketName = "isaacfeppyawsbucket";
 
     public String uploadS3(MultipartFile file){
-        this.s3Client = S3Client.builder().region(region).
-        credentialsProvider(provider).build();
+        this.s3Client = S3Client.builder().region(Region.of(region)).
+        credentialsProvider(provider()).build();
         System.out.println("s3 client initialized");
-        this.s3Presigner = S3Presigner.builder().region(region).credentialsProvider(provider).build();
+        this.s3Presigner = S3Presigner.builder().region(Region.of(region)).credentialsProvider(provider()).build();
         System.out.println("s3 presigner successful");
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());

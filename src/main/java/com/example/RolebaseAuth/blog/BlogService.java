@@ -132,6 +132,8 @@ public class BlogService {
            commentModel.setCommentee(user.get());
 
 
+           System.out.println(commentModel);
+           System.out.println("going to save 123");
            CommentModel comments = commentRepository.save(commentModel);
            System.out.println("comment successfully saved");
 

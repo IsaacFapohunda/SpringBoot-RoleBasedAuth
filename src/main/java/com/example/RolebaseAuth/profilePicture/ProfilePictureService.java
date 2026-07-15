@@ -37,26 +37,21 @@ public class ProfilePictureService {
       try{
           String pictureLink = s3Service.uploadS3(file);
           System.out.println(pictureLink + "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^77");
-          System.out.println("000");
           String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-          System.out.println("00");
 //        byte[] imageBytes = file.getBytes();
-          System.out.println("0");
+
           ProfilePictureModel profilePicture = new ProfilePictureModel(fileName, file.getContentType(), pictureLink);
-          System.out.println("1");
           profilePictureRepo.save(profilePicture);
-          System.out.println("3");
+
           System.out.println("profilePicture"  +  profilePicture);
-          System.out.println("4");
+
           Optional<User> user = userRepository.findById(userId);
-          System.out.println("5");
+
           System.out.println("finding userrepo");
 
           user.get().setProfilePicture(profilePicture);
-          System.out.println("6");
           System.out.println("saved user");
           userRepository.save(user.get());
-          System.out.println("7");
           System.out.println(user);
           serverResponse.setResponseCode("200");
           serverResponse.setResponseData(pictureLink);

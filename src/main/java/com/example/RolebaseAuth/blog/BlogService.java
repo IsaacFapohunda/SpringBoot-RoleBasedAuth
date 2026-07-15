@@ -122,15 +122,18 @@ public class BlogService {
 
            email = jwtService.extractUserName(jwtToken);
            Optional<User> user = userRepository.findByEmail(email);
+           System.out.println("user found in the repo");
 
            BlogModel blog = blogRepository.findById(blogpostId).orElseThrow();
+           System.out.println("userblog found in the repo");
 
            CommentModel commentModel = new CommentModel();
            commentModel.setComment(commentRequest.getComment());
            commentModel.setCommentee(user.get());
 
 
-          CommentModel comments = commentRepository.save(commentModel);
+           CommentModel comments = commentRepository.save(commentModel);
+           System.out.println("comment successfully saved");
 
            System.out.println(comments);
 

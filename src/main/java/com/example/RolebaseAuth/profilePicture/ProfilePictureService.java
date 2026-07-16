@@ -100,6 +100,18 @@ public class ProfilePictureService {
 
     }
 
+    public String getProfilePictureUrl (User user){
+        String defaultImage = "https://no-image-yet";
+        if(user.getProfilePicture() == null){
+            return  defaultImage;
+        }
+        String s3Link = user.getProfilePicture().getPictureS33link();
+        if(s3Link == null || s3Link.isBlank()){
+            return defaultImage;
+        }
+        return s3Link;
+    }
+
 
 
 }

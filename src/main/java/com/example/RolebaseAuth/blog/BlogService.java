@@ -11,6 +11,7 @@ import com.example.RolebaseAuth.model.User;
 import com.example.RolebaseAuth.model.UserDTO;
 import com.example.RolebaseAuth.model.UserProjection;
 import com.example.RolebaseAuth.payloads.BaseServerResponse;
+import com.example.RolebaseAuth.profilePicture.ProfilePictureService;
 import com.example.RolebaseAuth.repository.UserRepository;
 import com.example.RolebaseAuth.security.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,6 +44,8 @@ public class BlogService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final LikesRepository likesRepository;
+
+    private final ProfilePictureService profilePictureService;
 
    private final SimpMessagingTemplate messagingTemplate;
 
@@ -145,14 +148,17 @@ public class BlogService {
            userDTO.setEmail(blog.getUser().getEmail());
            userDTO.setId(blog.getUser().getId());
            userDTO.setFirstName(blog.getUser().getFirstName());
-           userDTO.setProfilePicture(blog.getUser().getProfilePicture().getPictureS33link());
+           userDTO.setProfilePicture(profilePictureService.getProfilePictureUrl(blog.getUser()));
+
 
            UserDTO newCommentUserDTO = new UserDTO();
 
            newCommentUserDTO.setId(comments.getCommentee().getId());
            newCommentUserDTO.setEmail(comments.getCommentee().getEmail());
            newCommentUserDTO.setFirstName(comments.getCommentee().getFirstName());
-           newCommentUserDTO.setProfilePicture(comments.getCommentee().getProfilePicture().getPictureS33link());
+           newCommentUserDTO.setProfilePicture(profilePictureService.getProfilePictureUrl(comments.getCommentee()));
+           //newCommentUserDTO.setProfilePicture(comments.getCommentee().getProfilePicture().getPictureS33link());
+
 
 
            CommentResponse commentResponse = new CommentResponse();
@@ -179,7 +185,9 @@ public class BlogService {
                        existingCommentUserDTO.setId(existingComment.getCommentee().getId());
                        existingCommentUserDTO.setEmail(existingComment.getCommentee().getEmail());
                        existingCommentUserDTO.setFirstName(existingComment.getCommentee().getFirstName());
-                       existingCommentUserDTO.setProfilePicture(existingComment.getCommentee().getProfilePicture().getPictureS33link());
+                       existingCommentUserDTO.setProfilePicture(profilePictureService.getProfilePictureUrl(existingComment.getCommentee()));
+
+                       //existingCommentUserDTO.setProfilePicture(existingComment.getCommentee().getProfilePicture().getPictureS33link());
 
                        existingCommentResponse.setUserDTO(existingCommentUserDTO);
 

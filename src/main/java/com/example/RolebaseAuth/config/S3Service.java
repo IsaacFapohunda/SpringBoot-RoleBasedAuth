@@ -123,9 +123,18 @@ public class S3Service {
                 return link;
 
         } catch (IOException e){
-            throw new RuntimeException("Failed to upload file and generaate url", e);
+            throw new RuntimeException("Failed to upload file and generate url", e);
         }
     }
+
+
+
+
+
+
+
+
+
 ////    public S3Service(S3Client s3Client, S3Presigner s3Presigner){
 ////
 ////        this.s3Client = s3Client;

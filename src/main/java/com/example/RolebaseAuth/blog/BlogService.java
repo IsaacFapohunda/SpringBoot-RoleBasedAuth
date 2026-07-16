@@ -125,10 +125,12 @@ public class BlogService {
            System.out.println("user found in the repo");
 
            BlogModel blog = blogRepository.findById(blogpostId).orElseThrow();
-           System.out.println("userblog found in the repo");
+
+           System.out.println("blog found in the repo");
 
            CommentModel commentModel = new CommentModel();
            commentModel.setComment(commentRequest.getComment());
+           commentModel.setBlog(blog);
            commentModel.setCommentee(user.get());
 
 
@@ -191,8 +193,10 @@ public class BlogService {
            commentResponseList.add(commentResponse);
 
 
+           System.out.println("we are here");
            blog.getComments().add(comments);
            BlogModel blogcontent = blogRepository.save(blog);
+           System.out.println("blog with comment saved");
 
 
            BlogResponse blogResponse = new BlogResponse();
@@ -208,7 +212,10 @@ public class BlogService {
            blogResponse.setUserDTO(userDTO);
 
 
+           System.out.println("blogresponse sent");
+
            serverResponse.setResponseData(blogResponse);
+           System.out.println("we are here");
            messagingTemplate.convertAndSend("/role_base/blogComment", blogResponse);
 
            return serverResponse;

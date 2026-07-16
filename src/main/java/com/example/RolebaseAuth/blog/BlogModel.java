@@ -29,7 +29,7 @@ public class BlogModel {
     private LocalDateTime timeCreated;
     private LocalDateTime updatedAt;
 
-    @OneToMany(cascade = CascadeType.ALL) //this means one blog post can have many comments
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL) //this means one blog post can have many comments
     private List<CommentModel> comments;
 
     private byte[] blog_image;

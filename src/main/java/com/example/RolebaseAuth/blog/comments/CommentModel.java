@@ -1,5 +1,6 @@
 package com.example.RolebaseAuth.blog.comments;
 
+import com.example.RolebaseAuth.blog.BlogModel;
 import com.example.RolebaseAuth.blog.likes.LikesModel;
 import com.example.RolebaseAuth.model.User;
 import com.example.RolebaseAuth.model.UserRole;
@@ -24,6 +25,11 @@ public class CommentModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @ManyToOne
+    @JoinColumn(name = "blogpostId")
+    private BlogModel blog;
+
     private LocalDateTime dateCreated;
     private LocalDateTime dateEdited;
     private String comment;

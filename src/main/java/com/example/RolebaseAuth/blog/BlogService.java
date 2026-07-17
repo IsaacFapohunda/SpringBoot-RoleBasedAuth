@@ -143,19 +143,19 @@ public class BlogService {
            System.out.println("4");
 
            //System.out.println(commentModel); /// This is causing a recursion with blog
-           System.out.println("comment: id =" + commentModel.getId()
-                   + ", text =" + commentModel.getComment()
-                   + ", by userId =" + commentModel.getCommentee().getId()
-                   + ", blog =" + blogModel.getBlogpostId()
-           );
+//           System.out.println("comment: id =" + commentModel.getId()
+//                   + ", text =" + commentModel.getComment()
+//                   + ", by userId =" + commentModel.getCommentee().getId()
+//                   + ", blog =" + blogModel.getBlogpostId()
+//           );
            System.out.println("going to save 123 in comment repo");
            CommentModel comments = commentRepository.save(commentModel);
            System.out.println("comment successfully saved");
 
-           System.out.println("Total comments for blog:" +
-                   blog.getComments().size());
-           blog.getComments().forEach(c ->
-                   System.out.println(" - " + c.getId() + ":" + c.getComment()));
+//           System.out.println("Total comments for blog:" +
+//                   blog.getComments().size());
+//           blog.getComments().forEach(c ->
+//                   System.out.println(" - " + c.getId() + ":" + c.getComment()));
 
            //System.out.println(comments); /// This is causing a recursion with blog
 

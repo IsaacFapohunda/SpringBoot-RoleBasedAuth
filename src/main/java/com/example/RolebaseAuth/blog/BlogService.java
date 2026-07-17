@@ -132,10 +132,15 @@ public class BlogService {
            System.out.println("blog found in the repo");
 
            CommentModel commentModel = new CommentModel();
+           System.out.println("1");
            commentModel.setComment(commentRequest.getComment());
+           System.out.println("2");
            commentModel.setBlog(blog);
+           System.out.println("3");
            commentModel.setCommentee(user.get());
 
+
+           System.out.println("4");
 
            //System.out.println(commentModel); /// This is causing a recursion with blog
            System.out.println("comment: id =" + commentModel.getId()

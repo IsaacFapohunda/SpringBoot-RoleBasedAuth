@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class CommentModel {
     private String id;
 
     @ManyToOne
+    @ToString.Exclude
     @JoinColumn(name = "blogpostId")
     private BlogModel blog;
 

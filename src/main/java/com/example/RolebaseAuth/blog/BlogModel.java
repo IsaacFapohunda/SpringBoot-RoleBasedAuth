@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class BlogModel {
     private LocalDateTime timeCreated;
     private LocalDateTime updatedAt;
 
+    @ToString.Exclude //to prevent any loop occasion
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL) //this means one blog post can have many comments
     private List<CommentModel> comments;
 

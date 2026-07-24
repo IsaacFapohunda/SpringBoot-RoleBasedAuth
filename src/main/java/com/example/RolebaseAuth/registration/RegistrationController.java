@@ -2,6 +2,7 @@ package com.example.RolebaseAuth.registration;
 
 import com.example.RolebaseAuth.annotations.PermissionGuard;
 import com.example.RolebaseAuth.model.User;
+import com.example.RolebaseAuth.payloads.BaseServerResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,9 +31,15 @@ public class RegistrationController {
 
     @PermissionGuard(value = {"CREATE_USER"})
     @PostMapping(value = "/create")
-    public ResponseEntity<Object> createUser(@RequestBody RegistrationRequest registrationRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<Object> createUser(@RequestBody RegistrationRequest registrationRequest, HttpServletRequest request) throws IOException {
         log.info("Inside controller");
-        System.out.println("yea");
-        return ResponseEntity.ok(registrationService.createUser(registrationRequest, request, response));
+        BaseServerResponse<Object> response = registrationService.createUser(registrationRequest);
+        if(!response.isSuccess()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+           // or make BaseServerResponse carry the HTTP status itself
+            //return ResponseEntity.status(response.getHttpStatus()).body(response);
+        }
+        return  ResponseEntity.ok(response);
+
     }
 }

@@ -48,6 +48,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
 
 
         if (url.startsWith("/api/v1/role_base/auth/")) {
+            log.info("JWT bypassed");
             return true;
         }
 
@@ -93,6 +94,8 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
                 serverResponse.setSuccess(false);
                 serverResponse.setResponseCode("01");
                 serverResponse.setResponseMessage("Token has expired");
+                String json = objectMapper.writeValueAsString(serverResponse);
+                response.getWriter().write(json);
                 return false;
             }
             else{
@@ -107,6 +110,15 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             }
         }catch(Exception e){
             log.info(e.getMessage() + "QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQqqq");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+            serverResponse.setSuccess(false);
+            serverResponse.setResponseMessage(e.getMessage());
+
+            response.getWriter().write(
+                    objectMapper.writeValueAsString(serverResponse)
+            );
+
             return false;
         }
 

@@ -9,11 +9,14 @@ import com.example.RolebaseAuth.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -30,7 +33,7 @@ public class RegistrationService {
     private final OtpRepository otpRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public BaseServerResponse<Object> createUser(RegistrationRequest registrationRequest, HttpServletRequest request) throws JsonProcessingException {
+    public BaseServerResponse<Object> createUser(RegistrationRequest registrationRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         log.info("Over here~~~~~~~~~~~~~~~~~~~~~~");
         User user = new User();
@@ -41,12 +44,14 @@ public class RegistrationService {
         log.info("Hey=???????????");
 
         boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
+
         BaseServerResponse<Object> serverResponse = new BaseServerResponse<>();
         if (userExists){
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
             serverResponse.setSuccess(false);
-            serverResponse.setResponseCode("500");
             serverResponse.setResponseMessage("email already exists");
             String jsonResponse = objectMapper.writeValueAsString(serverResponse);
+            response.getWriter().write(jsonResponse);
         }
 
         else{

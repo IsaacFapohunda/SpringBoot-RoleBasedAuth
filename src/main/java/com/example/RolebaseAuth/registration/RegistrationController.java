@@ -4,6 +4,7 @@ import com.example.RolebaseAuth.annotations.PermissionGuard;
 import com.example.RolebaseAuth.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 @Data
 @Builder
@@ -26,9 +29,9 @@ public class RegistrationController {
 
     @PermissionGuard(value = {"CREATE_USER"})
     @PostMapping(value = "/create")
-    public ResponseEntity<Object> createUser(@RequestBody RegistrationRequest registrationRequest, HttpServletRequest request) throws JsonProcessingException {
+    public ResponseEntity<Object> createUser(@RequestBody RegistrationRequest registrationRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.info("Inside controller");
         System.out.println("yea");
-        return ResponseEntity.ok(registrationService.createUser(registrationRequest, request));
+        return ResponseEntity.ok(registrationService.createUser(registrationRequest, request, response));
     }
 }

@@ -1,17 +1,15 @@
 package com.example.RolebaseAuth.model.otp;
 
 
+import com.example.RolebaseAuth.exception.ApiExceptions;
 import com.example.RolebaseAuth.model.User;
 import com.example.RolebaseAuth.model.UserService;
 import com.example.RolebaseAuth.payloads.BaseServerResponse;
 import com.example.RolebaseAuth.repository.OtpRepository;
 import com.example.RolebaseAuth.repository.UserRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +17,6 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 
 
 @Data
@@ -32,10 +29,12 @@ public class OtpService {
     private final OtpRepository otpRepository;
     private final UserRepository userRepository;
 
+    private final OtpRequest otpRequest;
+
 
     public int generateOtp(){
         SecureRandom random = new SecureRandom();
-        int otp = random.nextInt((int) Math.pow(10, 4));
+        int otp = 1000 + random.nextInt((9000));
         String otpStr = String.format("%0" + 4 + "d", otp);
         System.out.println(otpStr.length() + "length of otp");
         return otp;
@@ -52,24 +51,39 @@ public class OtpService {
         return otpRepository.findByOtp(otp);
     }
 
-    public int setConfirmedAt(int otp){
-        return otpRepository.updateConfirmedAt(otp, LocalDateTime.now());
-    }
 
     @Transactional
-    public String confirmOtp(int otp){
+    public BaseServerResponse<Object> confirmOtp(int otp, OtpRequest otpRequest){
+        BaseServerResponse serverResponse = new BaseServerResponse();
 
-    OtpModel otpModel = getToken(otp).orElseThrow(() -> new IllegalStateException("Token not found"));
-        if(otpModel.getConfirmedAt() != null){
-            throw new IllegalStateException("Email already taken");
-        }
-        LocalDateTime expiredAt = otpModel.getExpiresAt();
-        if(expiredAt.isBefore(LocalDateTime.now())){
-            throw new IllegalStateException("otp expired");
-        }
-        setConfirmedAt(otp);
-        userService.enableAppUser(otpModel.getUser().getEmail());
-        return "Confirmed";
+        OtpModel otpModel = getToken(otp).orElseThrow(() -> new IllegalStateException("otp not found"));
+        User user = userRepository.findByEmail(otpRequest.getEmail()).orElseThrow(()-> new RuntimeException("User not found"));
+
+        int updateTable = otpRepository.confirmedTokenIfValid(otp, LocalDateTime.now(), LocalDateTime.now());
+
+            if(!Objects.equals(otpRequest.getEmail(), user.getEmail())){
+                throw new ApiExceptions("Invalid email", 400);
+            }
+
+            ///This
+            if(otpModel.getConfirmedAt() != null){
+                throw new ApiExceptions("Otp already used", 409);
+            }
+
+            else if(!Objects.equals(otp, otpModel.getOtp())){
+                throw new ApiExceptions("Incorrect otp", 400);
+            }
+
+            ///This
+            if(otpModel.getExpiresAt().isBefore(LocalDateTime.now())) {
+                throw new ApiExceptions("otp expired", 410);
+            }
+
+            userService.enableAppUser(otpModel.getUser().getEmail());
+            serverResponse.setSuccess(true);
+            serverResponse.setResponseMessage("Otp confirmed");
+            return serverResponse;
+
     }
 
 

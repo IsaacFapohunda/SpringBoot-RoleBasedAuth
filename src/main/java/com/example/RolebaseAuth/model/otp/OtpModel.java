@@ -21,11 +21,12 @@ public class OtpModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Column(unique = true)
     private int otp;
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;
     private LocalDateTime confirmedAt;
-
     @ManyToOne
     private User user;
 
@@ -35,8 +36,8 @@ public class OtpModel {
             LocalDateTime expiresAt,
             User user) {
         this.otp = otp;
-        this.createdAt = createdAt;
-        this.expiresAt = expiresAt;
+        this.createdAt = LocalDateTime.now();
+        this.expiresAt = createdAt.plusMinutes(1);
         this.user = user;
     }
 

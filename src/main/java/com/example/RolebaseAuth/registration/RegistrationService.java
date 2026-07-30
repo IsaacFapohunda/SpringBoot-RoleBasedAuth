@@ -8,7 +8,6 @@ import com.example.RolebaseAuth.repository.OtpRepository;
 import com.example.RolebaseAuth.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

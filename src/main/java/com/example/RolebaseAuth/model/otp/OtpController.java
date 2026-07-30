@@ -2,8 +2,10 @@ package com.example.RolebaseAuth.model.otp;
 
 
 import com.example.RolebaseAuth.model.UserService;
+import com.example.RolebaseAuth.payloads.BaseServerResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +18,10 @@ public class OtpController {
     private final UserService userService;
 
 
+
     @GetMapping("/confirmOtp")
-    ResponseEntity<Object> confirmRegistrationOtp(@RequestParam int otp){
-        return ResponseEntity.ok().body(otpService.confirmOtp(otp));
+    ResponseEntity<Object> confirmRegistrationOtp(@RequestParam int otp, OtpRequest otpRequest) {
+        return ResponseEntity.ok().body(otpService.confirmOtp(otp, otpRequest));
     }
 
     @GetMapping("/sendForgetPasswordOtp")

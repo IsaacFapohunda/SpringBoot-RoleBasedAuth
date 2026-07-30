@@ -1,11 +1,8 @@
 package com.example.RolebaseAuth.registration;
 
 import com.example.RolebaseAuth.annotations.PermissionGuard;
-import com.example.RolebaseAuth.model.User;
 import com.example.RolebaseAuth.payloads.BaseServerResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

@@ -21,8 +21,16 @@ public interface OtpRepository extends JpaRepository<OtpModel, String> {
     @Query(
             "UPDATE OtpModel c " +
                     "SET c.confirmedAt = ?2 " +
-                    "WHERE c.otp = ?1")
-    int updateConfirmedAt(int otp,
-                          LocalDateTime confirmedAt);
+                    "WHERE c.otp = ?1" +
+                    //check not used already
+                    "AND c.confirmedAt IS NULL " +
+                    //update row if time is after time passed as the 3rd parameter
+                    "AND c.expiresAt > ?3")
+    int confirmedTokenIfValid(int otp,
+                          LocalDateTime confirmedAt,
+                              LocalDateTime expiresAt);
+
+    //1,2,3 simply means the parameters passed in order
+    //returns 1 if worked 0 if failed
 
 }

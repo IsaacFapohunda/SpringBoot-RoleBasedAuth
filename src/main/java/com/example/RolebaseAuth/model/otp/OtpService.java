@@ -29,8 +29,6 @@ public class OtpService {
     private final OtpRepository otpRepository;
     private final UserRepository userRepository;
 
-    private final OtpRequest otpRequest;
-
 
     public int generateOtp(){
         SecureRandom random = new SecureRandom();
@@ -91,7 +89,7 @@ public class OtpService {
         BaseServerResponse response = new BaseServerResponse<>();
         int otp = generateOtp();
         Optional<User>  user = userRepository.findByEmail(email);
-        if(user != null) {
+        if(user.isPresent()) {
             OtpModel forgetpasswordOtp = new OtpModel(
                     otp,
                     LocalDateTime.now(),
@@ -127,7 +125,7 @@ public class OtpService {
            response.setResponseMessage("Unknown user");
            response.setSuccess(false);
        }
-       if(!otpHolder.isPresent()){
+       if(otpHolder.isEmpty()){
            response.setResponseCode("0");
            response.setResponseMessage("Wrong OTP");
            response.setSuccess(false);

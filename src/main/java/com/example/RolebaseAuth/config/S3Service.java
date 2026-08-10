@@ -36,6 +36,8 @@
 //@Data
 //@Service
 //@RequiredArgsConstructor
+
+///my aws subscription expires for the month
 //public class S3Service {
 //    private S3Client s3Client;
 //

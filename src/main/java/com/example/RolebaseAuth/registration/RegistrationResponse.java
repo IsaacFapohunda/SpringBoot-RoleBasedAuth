@@ -1,7 +1,10 @@
 package com.example.RolebaseAuth.registration;
 
+import com.example.RolebaseAuth.RoleAndPermission.UserRole;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -10,8 +13,7 @@ public class RegistrationResponse {
     private String email;
     private String firstName;
 
-  //  when redeploy uncomment roles
-    //private Set<UserRole> roles;
+    private Set<UserRole> roles;
     private Boolean enabled;
 
     private Integer otp;

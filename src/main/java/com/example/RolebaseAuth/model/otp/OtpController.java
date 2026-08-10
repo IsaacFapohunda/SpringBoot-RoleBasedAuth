@@ -18,20 +18,25 @@ public class OtpController {
     private final UserService userService;
 
 
-
-    @GetMapping("/confirmOtp")
-    ResponseEntity<Object> confirmRegistrationOtp(@RequestParam int otp, OtpRequest otpRequest) {
-        return ResponseEntity.ok().body(otpService.confirmOtp(otp, otpRequest));
+    @PostMapping("/confirmOtp")
+    ResponseEntity<Object> confirmRegistrationOtp(@RequestBody OtpRequest otpRequest) {
+        return ResponseEntity.ok().body(otpService.confirmOtp(otpRequest));
     }
 
-    @GetMapping("/sendForgetPasswordOtp")
-    ResponseEntity<Object> getForgetPasswordOtp(@RequestParam String email){
+    @GetMapping("/resendOtp")
+    ResponseEntity<Object> resendRegistrationOtp(@RequestBody OtpRequest otpRequest) {
+        return ResponseEntity.ok().body(otpService.resendOtp(otpRequest));
+    }
+
+
+    @PostMapping("/sendForgetPasswordOtp")
+    ResponseEntity<Object> getForgetPasswordOtp(@RequestBody ForgetPasswordResetRequest forgetPasswordResetRequest){
         System.out.println("send forget password otp works");
-        return ResponseEntity.ok().body(otpService.SendForgetPasswordOtp(email));
+        return ResponseEntity.ok().body(otpService.SendForgetPasswordOtp(forgetPasswordResetRequest));
     }
 
     @PostMapping("/forgetpasswordReset")
-    ResponseEntity<Object> forgetPasswordReset(@RequestParam int otp, @RequestBody ForgetPasswordResetRequest forgetPasswordResetRequest){
-        return ResponseEntity.ok().body(otpService.ForgetPasswordReset(otp, forgetPasswordResetRequest));
+    ResponseEntity<Object> forgetPasswordReset(@RequestBody ForgetPasswordResetRequest forgetPasswordResetRequest){
+        return ResponseEntity.ok().body(otpService.ForgetPasswordReset(forgetPasswordResetRequest));
     }
 }

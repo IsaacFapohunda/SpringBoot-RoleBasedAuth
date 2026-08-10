@@ -1,9 +1,8 @@
-package com.example.RolebaseAuth.model;
+package com.example.RolebaseAuth.RoleAndPermission;
 
-import com.example.RolebaseAuth.enums.PermissionName;
+import com.example.RolebaseAuth.RoleAndPermission.enums.PermissionName;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.transaction.annotation.Transactional;
 
 
 @Data

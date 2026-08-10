@@ -1,8 +1,6 @@
 package com.example.RolebaseAuth.blog;
 
 import com.example.RolebaseAuth.blog.comments.CommentModel;
-import com.example.RolebaseAuth.blog.likes.LikesModel;
-import com.example.RolebaseAuth.model.Permission;
 import com.example.RolebaseAuth.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,9 +10,7 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity

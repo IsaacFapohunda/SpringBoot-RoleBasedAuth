@@ -11,7 +11,7 @@ import com.example.RolebaseAuth.model.User;
 import com.example.RolebaseAuth.model.UserDTO;
 import com.example.RolebaseAuth.model.UserProjection;
 import com.example.RolebaseAuth.payloads.BaseServerResponse;
-import com.example.RolebaseAuth.profilePicture.ProfilePictureService;
+//import com.example.RolebaseAuth.profilePicture.ProfilePictureService;
 import com.example.RolebaseAuth.repository.UserRepository;
 import com.example.RolebaseAuth.security.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,7 +45,7 @@ public class BlogService {
     private final CommentRepository commentRepository;
     private final LikesRepository likesRepository;
 
-    private final ProfilePictureService profilePictureService;
+   // private final ProfilePictureService profilePictureService;
 
    private final SimpMessagingTemplate messagingTemplate;
 
@@ -143,28 +143,28 @@ public class BlogService {
            System.out.println("4");
 
            //System.out.println(commentModel); /// This is causing a recursion with blog
-//           System.out.println("comment: id =" + commentModel.getId()
-//                   + ", text =" + commentModel.getComment()
-//                   + ", by userId =" + commentModel.getCommentee().getId()
-//                   + ", blog =" + blogModel.getBlogpostId()
-//           );
+//     /      System.out.println("comment: id =" + commentModel.getId()
+//    /               + ", text =" + commentModel.getComment()
+//   /                + ", by userId =" + commentModel.getCommentee().getId()
+//  /                 + ", blog =" + blogModel.getBlogpostId()
+// /          );
            System.out.println("going to save 123 in comment repo");
            CommentModel comments = commentRepository.save(commentModel);
            System.out.println("comment successfully saved");
 
-//           System.out.println("Total comments for blog:" +
-//                   blog.getComments().size());
-//           blog.getComments().forEach(c ->
-//                   System.out.println(" - " + c.getId() + ":" + c.getComment()));
+//   /        System.out.println("Total comments for blog:" +
+//  /                 blog.getComments().size());
+// /          blog.getComments().forEach(c ->
+///                   System.out.println(" - " + c.getId() + ":" + c.getComment()));
 
-           //System.out.println(comments); /// This is causing a recursion with blog
+           ///System.out.println(comments); /// This is causing a recursion with blog
 
 
            UserDTO userDTO = new UserDTO();
            userDTO.setEmail(blog.getUser().getEmail());
            userDTO.setId(blog.getUser().getId());
            userDTO.setFirstName(blog.getUser().getFirstName());
-           userDTO.setProfilePicture(profilePictureService.getProfilePictureUrl(blog.getUser()));
+          // userDTO.setProfilePicture(profilePictureService.getProfilePictureUrl(blog.getUser()));
 
 
 
@@ -173,8 +173,8 @@ public class BlogService {
            newCommentUserDTO.setId(comments.getCommentee().getId());
            newCommentUserDTO.setEmail(comments.getCommentee().getEmail());
            newCommentUserDTO.setFirstName(comments.getCommentee().getFirstName());
-           newCommentUserDTO.setProfilePicture(profilePictureService.getProfilePictureUrl(comments.getCommentee()));
-           //newCommentUserDTO.setProfilePicture(comments.getCommentee().getProfilePicture().getPictureS33link());
+           //newCommentUserDTO.setProfilePicture(profilePictureService.getProfilePictureUrl(comments.getCommentee()));
+           ///newCommentUserDTO.setProfilePicture(comments.getCommentee().getProfilePicture().getPictureS33link());
 
 
 
@@ -202,9 +202,9 @@ public class BlogService {
                        existingCommentUserDTO.setId(existingComment.getCommentee().getId());
                        existingCommentUserDTO.setEmail(existingComment.getCommentee().getEmail());
                        existingCommentUserDTO.setFirstName(existingComment.getCommentee().getFirstName());
-                       existingCommentUserDTO.setProfilePicture(profilePictureService.getProfilePictureUrl(existingComment.getCommentee()));
+                       //existingCommentUserDTO.setProfilePicture(profilePictureService.getProfilePictureUrl(existingComment.getCommentee()));
 
-                       //existingCommentUserDTO.setProfilePicture(existingComment.getCommentee().getProfilePicture().getPictureS33link());
+                       ///existingCommentUserDTO.setProfilePicture(existingComment.getCommentee().getProfilePicture().getPictureS33link());
 
                        existingCommentResponse.setUserDTO(existingCommentUserDTO);
 

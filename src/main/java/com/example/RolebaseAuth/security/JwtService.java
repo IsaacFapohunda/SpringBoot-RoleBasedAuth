@@ -22,8 +22,10 @@ import java.util.function.Function;
 public class JwtService {
 
 
-    @Value("${JWT_SECRET}")
-    private String secretKey;
+    private static final String secretKey = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+
+    //    @Value("${JWT_SECRET}")
+//    private String secretKey;
     public String extractUserName(String jwtToken){
         return extractClaim(jwtToken, Claims::getSubject);
     }
@@ -72,7 +74,7 @@ public class JwtService {
                 .setClaims(extractClaims)
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 15 * 60 * 1000))//this is 15 minutes. 10minutes is 10 * 60secs, then milli there
+                .setExpiration(new Date(System.currentTimeMillis() + 10 * 60 * 1000))//this is 15 minutes.
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
@@ -82,7 +84,7 @@ public class JwtService {
                 .setClaims(extractClaims)
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 30 * 60 * 24 * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + 20 * 60 * 1000)) //this is 30 minutes
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();

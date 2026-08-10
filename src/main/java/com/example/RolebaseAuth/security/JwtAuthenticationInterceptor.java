@@ -1,10 +1,7 @@
 package com.example.RolebaseAuth.security;
 
 
-import com.example.RolebaseAuth.annotations.PermissionGuard;
-import com.example.RolebaseAuth.model.Permission;
 import com.example.RolebaseAuth.model.User;
-import com.example.RolebaseAuth.model.UserRole;
 import com.example.RolebaseAuth.model.UserService;
 import com.example.RolebaseAuth.payloads.BaseServerResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,17 +9,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.Collectors;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -121,9 +115,6 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
 
             return false;
         }
-
-
-
 
 
 

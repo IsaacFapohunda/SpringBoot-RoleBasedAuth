@@ -1,6 +1,6 @@
-package com.example.RolebaseAuth.model;
+package com.example.RolebaseAuth.RoleAndPermission;
 
-import com.example.RolebaseAuth.enums.RoleName;
+import com.example.RolebaseAuth.RoleAndPermission.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,11 +26,11 @@ public class UserRole {
     @Column(name = "role_desc", nullable = false)
     private String roleDescription;
 
-//    @Column(name = "created_at", nullable = true)
-//    private LocalDateTime createdAt;
-//
-//    @Column(name = "updated_at", nullable = true)
-//    private LocalDateTime updatedAt;
+    @Column(name = "created_at", nullable = true)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = true)
+    private LocalDateTime updatedAt;
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -44,14 +44,14 @@ public class UserRole {
 
     public UserRole(RoleName roleName,
                     String roleDescription
-                   // LocalDateTime createdAt,
-                    //LocalDateTime updatedAt,
-                    //Set<Permission> permissions
+                  // LocalDateTime createdAt,
+                   // LocalDateTime updatedAt,
+               //  Set<Permission> permissions
     ) {
         this.roleName = roleName;
         this.roleDescription = roleDescription;
-       // this.createdAt = createdAt;
-        //this.updatedAt = updatedAt;
-        //this.permissions = permissions;
+      //  this.createdAt = createdAt;
+      // this.updatedAt = updatedAt;
+     // this.permissions = permissions;
     }
 }

@@ -1,21 +1,16 @@
 package com.example.RolebaseAuth.security;
 
 import com.example.RolebaseAuth.annotations.PermissionGuard;
-import com.example.RolebaseAuth.model.Permission;
+import com.example.RolebaseAuth.RoleAndPermission.Permission;
 import com.example.RolebaseAuth.model.User;
-import com.example.RolebaseAuth.model.UserRole;
 import com.example.RolebaseAuth.model.UserService;
 import com.example.RolebaseAuth.payloads.BaseServerResponse;
 import com.example.RolebaseAuth.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -91,13 +86,15 @@ public class RolePermissionInterceptor implements HandlerInterceptor {
 
 
         // Check for permission on the controller method if the permission guard is part of the user permissions
-        Set<UserRole> roles = user.getRoles();
-        System.out.println(roles);
+
+      //  Set<UserRole> roles = user.getRoles();
+        //uncomment the above  and below 4 when you deploy
+        //System.out.println(roles);
         Set<Permission> permissions = new LinkedHashSet<>();
         System.out.println(permissions);
-        roles.forEach(userRole -> permissions.addAll(userRole.getPermissions()));
+       // roles.forEach(userRole -> permissions.addAll(userRole.getPermissions()));
 
-        System.out.println("All roles combined: " + roles);
+        //System.out.println("All roles combined: " + roles);
 
         // All permission names that belongs to the user in the database
         Set<String> allPermissionNames = permissions

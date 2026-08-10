@@ -1,4 +1,4 @@
-package com.example.RolebaseAuth.enums;
+package com.example.RolebaseAuth.RoleAndPermission.enums;
 
 public enum PermissionName {
 

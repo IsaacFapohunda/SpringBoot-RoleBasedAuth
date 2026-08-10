@@ -21,11 +21,11 @@ public class OtpModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-
     @Column(unique = true)
     private int otp;
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;
+
     private LocalDateTime confirmedAt;
     @ManyToOne
     private User user;

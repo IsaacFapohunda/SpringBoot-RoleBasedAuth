@@ -1,6 +1,6 @@
 package com.example.RolebaseAuth.model;
 
-import com.example.RolebaseAuth.blog.likes.LikesModel;
+import com.example.RolebaseAuth.RoleAndPermission.UserRole;
 import com.example.RolebaseAuth.profilePicture.ProfilePictureModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 @Builder
@@ -46,11 +44,8 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+
     private Set<UserRole> roles = new HashSet<>();
-
-//    @OneToMany(fetch = FetchType.EAGER)
-//    private Set<UserRole> roles = new HashSet<>();
-
     private Boolean enabled = false;
     private Boolean locked = false;
     private  Boolean isCredentialsNonExpired = true;

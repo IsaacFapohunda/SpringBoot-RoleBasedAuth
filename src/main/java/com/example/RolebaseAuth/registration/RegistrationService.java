@@ -4,7 +4,7 @@ import com.example.RolebaseAuth.model.User;
 import com.example.RolebaseAuth.model.otp.OtpModel;
 import com.example.RolebaseAuth.model.otp.OtpService;
 import com.example.RolebaseAuth.payloads.BaseServerResponse;
-import com.example.RolebaseAuth.repository.OtpRepository;
+import com.example.RolebaseAuth.model.otp.OtpRepository;
 import com.example.RolebaseAuth.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -59,15 +59,15 @@ public class RegistrationService {
                     LocalDateTime.now().plusMinutes(15),
                     user
             );
+
             otpService.saveOtp(otpModel);
             RegistrationResponse registrationResponse = new RegistrationResponse(
                     user.getId(),
                     user.getEmail(),
                     user.getFirstName(),
-                    user.getRoles(),
+                   // user.getRoles(),
                     user.getEnabled(),
                     otp
-
             );
             serverResponse.setSuccess(true);
             serverResponse.setResponseCode("200");

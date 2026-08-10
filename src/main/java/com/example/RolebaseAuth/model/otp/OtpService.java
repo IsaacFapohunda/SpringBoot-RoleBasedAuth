@@ -5,11 +5,11 @@ import com.example.RolebaseAuth.exception.ApiExceptions;
 import com.example.RolebaseAuth.model.User;
 import com.example.RolebaseAuth.model.UserService;
 import com.example.RolebaseAuth.payloads.BaseServerResponse;
-import com.example.RolebaseAuth.repository.OtpRepository;
 import com.example.RolebaseAuth.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +29,9 @@ public class OtpService {
     private final OtpRepository otpRepository;
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
+
 
     public int generateOtp(){
         SecureRandom random = new SecureRandom();
@@ -37,6 +40,7 @@ public class OtpService {
         System.out.println(otpStr.length() + "length of otp");
         return otp;
     }
+
     public void saveOtp(OtpModel otp){
 
       otpRepository.save(otp);
@@ -44,40 +48,32 @@ public class OtpService {
         System.out.println(otp);
     }
 
-    public Optional<OtpModel> getToken(int otp){
-        System.out.println(otpRepository.findByOtp(otp) + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&7");
-        return otpRepository.findByOtp(otp);
+
+    public Optional<OtpModel> getToken(OtpRequest otpRequest){
+        return otpRepository.findByUser_EmailAndOtp(otpRequest.getEmail(), otpRequest.getOtp());
     }
 
-
     @Transactional
-    public BaseServerResponse<Object> confirmOtp(int otp, OtpRequest otpRequest){
+    public BaseServerResponse<Object> confirmOtp(OtpRequest otpRequest){
         BaseServerResponse serverResponse = new BaseServerResponse();
 
-        OtpModel otpModel = getToken(otp).orElseThrow(() -> new IllegalStateException("otp not found"));
-        User user = userRepository.findByEmail(otpRequest.getEmail()).orElseThrow(()-> new RuntimeException("User not found"));
+        OtpModel savedOtp = otpRepository.findByUser_EmailAndOtp(otpRequest.getEmail(), otpRequest.getOtp()).orElseThrow(() ->
+                 new ApiExceptions("invalid otp", 400));
 
-        int updateTable = otpRepository.confirmedTokenIfValid(otp, LocalDateTime.now(), LocalDateTime.now());
-
-            if(!Objects.equals(otpRequest.getEmail(), user.getEmail())){
-                throw new ApiExceptions("Invalid email", 400);
-            }
+        int updateTable = otpRepository.confirmedTokenIfValid(otpRequest.getOtp(), LocalDateTime.now(), LocalDateTime.now());
+        System.out.println("update table");
 
             ///This
-            if(otpModel.getConfirmedAt() != null){
+            if(savedOtp.getConfirmedAt() != null){
                 throw new ApiExceptions("Otp already used", 409);
             }
 
-            else if(!Objects.equals(otp, otpModel.getOtp())){
-                throw new ApiExceptions("Incorrect otp", 400);
-            }
-
             ///This
-            if(otpModel.getExpiresAt().isBefore(LocalDateTime.now())) {
-                throw new ApiExceptions("otp expired", 410);
+            if(savedOtp.getExpiresAt().isBefore(LocalDateTime.now())) {
+                throw new ApiExceptions("otp expired", 401);
             }
 
-            userService.enableAppUser(otpModel.getUser().getEmail());
+            userService.enableAppUser(savedOtp.getUser().getEmail());
             serverResponse.setSuccess(true);
             serverResponse.setResponseMessage("Otp confirmed");
             return serverResponse;
@@ -85,16 +81,50 @@ public class OtpService {
     }
 
 
-    public BaseServerResponse SendForgetPasswordOtp(String email) {
-        BaseServerResponse response = new BaseServerResponse<>();
+    @Transactional
+    public BaseServerResponse<Object> resendOtp(OtpRequest otpRequest){
+        BaseServerResponse serverResponse = new BaseServerResponse();
+
+        User user = userRepository.findByEmail(otpRequest.getEmail()).orElseThrow(()->
+                new ApiExceptions("User not found", 400));
         int otp = generateOtp();
-        Optional<User>  user = userRepository.findByEmail(email);
-        if(user.isPresent()) {
+
+        OtpModel otpModel = new OtpModel(
+                otp,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                user
+        );
+
+        OtpResponse otpResponse =
+                new OtpResponse(
+                otpModel.getOtp()
+        );
+
+        saveOtp(otpModel);
+        serverResponse.setSuccess(true);
+        serverResponse.setResponseCode("200");
+        serverResponse.setResponseMessage("otp resent");
+        serverResponse.setResponseData(otpResponse);
+
+        return serverResponse;
+
+    }
+
+
+
+
+    public BaseServerResponse<Object> SendForgetPasswordOtp(ForgetPasswordResetRequest forgetPasswordResetRequest) {
+        BaseServerResponse response = new BaseServerResponse<>();
+
+        User user = userRepository.findByEmail(forgetPasswordResetRequest.getEmail()).orElseThrow(()->
+                new ApiExceptions("User not found", 400));
+            int otp = generateOtp();
             OtpModel forgetpasswordOtp = new OtpModel(
                     otp,
                     LocalDateTime.now(),
                     LocalDateTime.now().plusMinutes(15),
-                    user.get());
+                    user);
             saveOtp(forgetpasswordOtp);
 
             response.setResponseCode("200");
@@ -102,42 +132,32 @@ public class OtpService {
             response.setSuccess(true);
             response.setResponseData(forgetpasswordOtp.getOtp());
 
-            return response;
-        }
-        else{
-            response.setResponseCode("200");
-            response.setResponseMessage("Your email is not associated with this account");
-            response.setSuccess(true);
-            return response;
-
-        }
+        return response;
     }
 
-
-
-    public BaseServerResponse ForgetPasswordReset(int otp,  ForgetPasswordResetRequest forgetPasswordResetRequest) {
+    public BaseServerResponse ForgetPasswordReset(ForgetPasswordResetRequest forgetPasswordResetRequest) {
         BaseServerResponse response = new BaseServerResponse<>();
-        Optional<OtpModel> otpHolder = otpRepository.findByOtp(otp);
-       String otpHolderEmail = otpHolder.get().getUser().getEmail();
-       Optional<User> user = userRepository.findByEmail(otpHolderEmail);
-       if(Objects.isNull(user)){
-           response.setResponseCode("0");
-           response.setResponseMessage("Unknown user");
-           response.setSuccess(false);
-       }
-       if(otpHolder.isEmpty()){
-           response.setResponseCode("0");
-           response.setResponseMessage("Wrong OTP");
-           response.setSuccess(false);
+        BaseServerResponse Send = SendForgetPasswordOtp(forgetPasswordResetRequest);
+        OtpModel otpHolder = otpRepository.findByUser_EmailAndOtp
+                (forgetPasswordResetRequest.getEmail(),
+                        forgetPasswordResetRequest.getOtp()).orElseThrow(() -> new ApiExceptions("User not found", 400));
 
-       }
-   user.get().setPassword(forgetPasswordResetRequest.getNewPassword());
-       userRepository.save(user.get());
+
+        Optional<User> user = userRepository.findByEmail(forgetPasswordResetRequest.getEmail() );
+        //find the user with the otp
+        //if confirmed
+        if(Objects.isNull(user)){
+            response.setResponseCode("0");
+            response.setResponseMessage("Unknown user");
+            response.setSuccess(false);
+        }
+       user.get().setPassword(passwordEncoder.encode(forgetPasswordResetRequest.getNewPassword()));
+
+        userRepository.save(user.get());
         response.setResponseCode("200");
         response.setResponseMessage("Your password is now updated");
         response.setSuccess(true);
         return response;
     }
-
 
 }

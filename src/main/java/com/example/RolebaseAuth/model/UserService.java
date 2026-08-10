@@ -1,34 +1,18 @@
 package com.example.RolebaseAuth.model;
 
-import com.example.RolebaseAuth.enums.PermissionName;
-import com.example.RolebaseAuth.enums.RoleName;
-import com.example.RolebaseAuth.model.Dp.DpRequest;
-import com.example.RolebaseAuth.model.otp.OtpModel;
-import com.example.RolebaseAuth.model.otp.OtpService;
 import com.example.RolebaseAuth.model.password.ChangePasswordRequest;
 import com.example.RolebaseAuth.payloads.BaseServerResponse;
-import com.example.RolebaseAuth.profilePicture.ProfilePictureModel;
 import com.example.RolebaseAuth.profilePicture.ProfilePictureRepo;
-import com.example.RolebaseAuth.repository.PermissionRepository;
-import com.example.RolebaseAuth.repository.RoleRepository;
+import com.example.RolebaseAuth.RoleAndPermission.PermissionRepository;
+import com.example.RolebaseAuth.RoleAndPermission.RoleRepository;
 import com.example.RolebaseAuth.repository.UserRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Service

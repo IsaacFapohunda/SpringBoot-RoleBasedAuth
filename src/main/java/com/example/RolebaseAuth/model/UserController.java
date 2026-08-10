@@ -21,7 +21,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/getUser")
-    //@PermissionGuard(value = {"READ_USER"})
+    @PermissionGuard(value = {"READ_USER"})
     ResponseEntity<Object> getUser(@RequestParam String id){
         log.info("user controller baby");
         return ResponseEntity.ok().body(userService.getUserById(id));

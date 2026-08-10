@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new HashMap<>();
         body.put("success", false);
         body.put("message", apiExceptions.getMessage());
-        body.put("timestamp", LocalDateTime.now());
+        //body.put("timestamp", LocalDateTime.now());
 
         return new ResponseEntity<>(body, HttpStatus.valueOf(apiExceptions.getStatus()));
     }

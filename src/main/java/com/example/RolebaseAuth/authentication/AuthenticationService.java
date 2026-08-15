@@ -31,14 +31,11 @@ public class AuthenticationService {
     public BaseServerResponse<Object> authenticate(AuthenticationRequest authenticationRequest){
         BaseServerResponse serverResponse = new BaseServerResponse();
         User user = userRepository.findByEmail(authenticationRequest.getEmail())
-               .orElseThrow(()-> new RuntimeException("User not found"));
+               .orElseThrow(()-> new ApiExceptions("Invalid username or password", 409));
             if(!passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword())){
                 throw new ApiExceptions("Invalid username or password", 409);
             }
 
-            else if(!Objects.equals(authenticationRequest.getEmail(), user.getEmail())){
-                throw new ApiExceptions("Bad request", 409);
-            }
             Map<String, Object> jwtToken = jwtService.generateToken(user);
 
         AuthTokenModel authToken = tokenRepository.findByUser(user).orElse(new AuthTokenModel());
